@@ -29,9 +29,9 @@ VALUES  ("CEO", 777000, 1),
 -- Add the Employees data --
 
 INSERT INTO employees(first_name, last_name, role_id, manager_id)
-VALUES  ("Eduardo", "Figueroa", 1, 1),
-        ("Benjamin", "Figueroa", 1, 1),
-        ("Kyle", "Doyle", 1, 1),
+VALUES  ("Eduardo", "Figueroa", 1, null),
+        ("Benjamin", "Figueroa", 1, null),
+        ("Kyle", "Doyle", 1, null),
         ("David", "Pascual", 2, null),
         ("Daira", "Doyle", 2, null),
         ("Ivy", "May", 3, null),
