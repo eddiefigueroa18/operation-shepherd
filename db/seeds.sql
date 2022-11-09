@@ -27,7 +27,6 @@ VALUES  ("CEO", 777000, 1),
 
 
 -- Add the Employees data --
-
 INSERT INTO employees(first_name, last_name, role_id, manager_id)
 VALUES  ("Eduardo", "Figueroa", 1, null),
         ("Benjamin", "Figueroa", 1, null),

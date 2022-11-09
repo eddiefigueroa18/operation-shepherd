@@ -6,7 +6,8 @@
     "inquirer": "^8.2.4",
     "install": "^0.13.0",
     "mysql2": "^2.3.3",
-    "node": "^19.0.1"
+    "node": "^19.0.1",
+    "sequelize": "^6.25.5"
   },
   "scripts": {
     "start": "node server.js"
