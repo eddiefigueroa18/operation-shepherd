@@ -10,8 +10,40 @@ const connection = mysql.createConnection(
         password: "_EF10508315_",
         database: "management_db"
     }, 
-    console.log("Connection to management_db Successful.")
+    // console.log("Connection to management_db Successful.") 
 );
+
+
+//=============TEST=================TEST=================TEST========================//
+// const connection = require("./db/connection");
+// const express = require("express");
+// const inquirer = require("inquirer");
+// const PORT = process.env.PORT || 3001;
+// const app = express();
+
+// // express middleware
+// app.use(express.urlencoded({extended: false}));
+// app.use(express.json());
+
+// // Default response for any other request (Not found)
+// app.use((req, res) => {
+//   res.status(404).end();
+// });
+
+// // Start server after DB connection
+// connection.connect(err => {
+//   if (err) throw err;
+//   console.log('Database connected.');
+//   app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+//     promptUserMenu();
+//   });
+// });
+//========================TEST================TEST===============TEST=========//
+
+
+
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
@@ -71,7 +103,7 @@ const promptUserMenu = () => {
                 break;
         }
     })
-}
+};
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
@@ -83,7 +115,7 @@ const viewAllDepartments = () => {
         console.table(result);
         promptUserMenu();
     })
-}
+};
 
 //VIEW ALL ROLES
 const viewAllRoles = () => {
@@ -92,7 +124,7 @@ const viewAllRoles = () => {
         console.table(result);
         promptUserMenu();
     })
-}
+};
 
 // VIEW ALL EMPLOYEES 
 const viewAllEmployees = () => {
@@ -101,7 +133,7 @@ const viewAllEmployees = () => {
         console.table(result);
         promptUserMenu();
     })
-}
+};
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
@@ -122,7 +154,7 @@ const addDepartment = () => {
             promptUserMenu()
         })
     })
-} 
+}; 
 
 //ADD ROLE
 const addRole = () => {
@@ -166,7 +198,7 @@ const addRole = () => {
             })
         })
     })
-}
+};
 
 // ADD EMPLOYEE 
 const addEmployee = () => {
@@ -263,7 +295,7 @@ const updateEmployeeRole = () => {
             },
         ])
         .then((data) => {
-            // Get role id
+        // Get role id
             connection.query("SELECT id FROM role WHERE role.title = ?;", data.role, (err, results) => {
                 role_id = results[0].id;
                 connection.query("SELECT id FROM employee WHERE employee.first_name = ? AND employee.last_name = ?;", data.employee.split(" "), (err, results) => {
@@ -278,7 +310,14 @@ const updateEmployeeRole = () => {
     })
 
     })
-} 
+}; 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
+//EXIT
+const exitApp = () => {
+    console.log('\nThank you, Goodbye!')
+};
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+promptUserMenu();
