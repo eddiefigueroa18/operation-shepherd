@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 // const mysql = require("mysql2");
 const cTable = require("console.table");
 
+
 const connection = require("./db/connection")
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
@@ -141,13 +142,24 @@ const promptUserMenu = () => {
 
 // VIEW SECTION
 // VIEW ALL DEPARTMENTS
+// const viewAllDepartments = () => {
+//     connection.query("SELECT * FROM department", function (err, result) {
+//         console.log("\n");
+//         console.table(result);
+//         promptUserMenu();
+//     })
+// };
 const viewAllDepartments = () => {
-    connection.query("SELECT * FROM department", function (err, result) {
+      const sql = `SELECT * FROM department`;
+      connection.query(sql, (err, result) => {
+        if (err) {
+          throw err;
+        }
         console.log("\n");
         console.table(result);
-        promptUserMenu();
-    })
-};
+        return promptUserMenu();
+      });
+    };
 
 //VIEW ALL ROLES
 const viewAllRoles = () => {
