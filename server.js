@@ -1,53 +1,6 @@
 // Defined variables and requirements
 const inquirer = require("inquirer");
-// const mysql = require("mysql2");
-// const cTable = require("console.table");
-
 const connection = require("./db/connection")
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-
-// const connection = mysql.createConnection(
-//     {
-//         host: "localhost",
-//         user: "root",
-//         password: "_EF10508315_",
-//         database: "management_db"
-//     },
-//     // console.log("Connection to management_db Successful.") 
-// );
-
-
-//=============TEST=================TEST=================TEST========================//
-// const connection = require("./db/connection");
-// const express = require("express");
-// const inquirer = require("inquirer");
-// const PORT = process.env.PORT || 3001;
-// const app = express();
-
-// // express middleware
-// app.use(express.urlencoded({extended: false}));
-// app.use(express.json());
-
-// // Default response for any other request (Not found)
-// app.use((req, res) => {
-//   res.status(404).end();
-// });
-
-// // Start server after DB connection
-// connection.connect(err => {
-//   if (err) throw err;
-//   console.log('Database connected.');
-//   app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-//     promptUserMenu();
-//   });
-// });
-//========================TEST================TEST===============TEST=========//
-
-
-
-
-
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
 // First prompt the user with an array of questions to get started
@@ -87,14 +40,6 @@ const promptUserMenu = () => {
                     name: null,
                     value: "Update an employee role"
                 },
-                // "View all departments",
-                // "View all roles",
-                // "View all employees",
-                // "Add a department",
-                // "Add a role",
-                // "Add an employee",
-                // "Update an employee role",
-                // "Exit"
             ]
         }
     ])
@@ -265,44 +210,42 @@ function addRole() {
         {
             type: 'input',
             name: 'title',
-            message: 'what is the name of new role?',
-
+            message: 'What is the name of new role?',
         },
         {
             type: 'number',
             name: 'salary',
-            message: 'what is the salary of new role?',
-
+            message: 'What is the salary for the new role?',
         }
     ])
-        .then(answer => {
-            let params = [answer.title, answer.salary];
-            connection.query('SELECT * FROM departments', (err, result) => {
-                if (err) {
-                    console.log(err);
+    .then(answer => {
+        let params = [answer.title, answer.salary];
+        connection.query('SELECT * FROM departments', (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            let depts = result.map(({ name, id }) => ({ name: name, value: id }));
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "dept",
+                    message: "Choose which department the new role is a part of.",
+                    choices: depts
                 }
-                let depts = result.map(({ name, id }) => ({ name: name, value: id }));
-                inquirer.prompt([
-                    {
-                        type: "list",
-                        name: "dept",
-                        message: "Choose which department the new role is a part of.",
-                        choices: depts
+            ])
+            .then(answer => {
+                let dept = answer.dept;
+                params.push(dept);
+                connection.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', params, (err) => {
+                    if (err) {
+                        console.log(err);
                     }
-                ])
-                    .then(answer => {
-                        let dept = answer.dept;
-                        params.push(dept);
-                        connection.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', params, (err) => { //params?
-                            if (err) {
-                                console.log(err);
-                            }
-                            console.log("Role added");
-                            return promptUserMenu();
-                        })
-                    })
+                    console.log("Role added");
+                    return promptUserMenu();
+                })
             })
         })
+    })
 
 };
 
