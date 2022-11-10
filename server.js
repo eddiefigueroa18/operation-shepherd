@@ -1,8 +1,7 @@
 // Defined variables and requirements
 const inquirer = require("inquirer");
 // const mysql = require("mysql2");
-const cTable = require("console.table");
-
+// const cTable = require("console.table");
 
 const connection = require("./db/connection")
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
@@ -142,24 +141,13 @@ const promptUserMenu = () => {
 
 // VIEW SECTION
 // VIEW ALL DEPARTMENTS
-// const viewAllDepartments = () => {
-//     connection.query("SELECT * FROM department", function (err, result) {
-//         console.log("\n");
-//         console.table(result);
-//         promptUserMenu();
-//     })
-// };
 const viewAllDepartments = () => {
-      const sql = `SELECT * FROM department`;
-      connection.query(sql, (err, result) => {
-        if (err) {
-          throw err;
-        }
+    connection.query("SELECT * FROM departments", function (err, result) {
         console.log("\n");
         console.table(result);
-        return promptUserMenu();
-      });
-    };
+        promptUserMenu();
+    })
+};
 
 //VIEW ALL ROLES
 const viewAllRoles = () => {
@@ -192,7 +180,7 @@ const addDepartment = () => {
         }
     ])
         .then((data) => {
-            return connection.promise().query("INSERT INTO department (name) VALUES (?)", data.name)
+            return connection.promise().query("INSERT INTO department (department_name) VALUES (?)", data.name)
             // console.log("\nNew Department Created! See new Department below:");
 
         }).then((results) => {
@@ -202,8 +190,8 @@ const addDepartment = () => {
 
         .catch((err) => {
             console.error(err);
-            process.exitCode = 1
-            process.exit();
+            // process.exitCode = 1
+            // process.exit();
         })
 };
 

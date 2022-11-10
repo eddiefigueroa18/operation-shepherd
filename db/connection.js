@@ -7,9 +7,10 @@ const connection = mysql.createConnection(
     {
         host: "localhost",
         user: "root",
+        port: 3306,
         password: "_EF10508315_",
         database: "management_db"
-    }, 
+    },
     console.log("Connection to management_db Successful.")
 );
 
