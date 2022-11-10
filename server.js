@@ -267,7 +267,7 @@ const addEmployee = () => {
     ])
         .then(data => {
             let params = [data.first_name, data.last_name];
-            connection.query("SELECT title, id FROM role", (err, result) => {
+            connection.query("SELECT title, id FROM roles", (err, result) => {
                 if (err) {
                     throw err;
                 }
