@@ -171,6 +171,30 @@ const viewAllEmployees = () => {
 
 // ADDING SECTION
 // ADD A DEPARTMENT
+// const addDepartment = () => {
+//     inquirer.prompt([
+//         {
+//             type: "input",
+//             name: "newDepName",
+//             message: "What is the name of the new department? "
+//         }
+//     ])
+//         .then((data) => {
+//             return connection.promise().query("INSERT INTO department (department_name) VALUES (?)", data.name)
+//             // console.log("\nNew Department Created! See new Department below:");
+
+//         }).then((results) => {
+//             console.log("Add department result.", results)
+
+//         }).then(() => promptUserMenu())
+
+//         .catch((err) => {
+//             console.error(err);
+//             // process.exitCode = 1
+//             // process.exit();
+//         })
+// };
+
 const addDepartment = () => {
     inquirer.prompt([
         {
@@ -180,37 +204,13 @@ const addDepartment = () => {
         }
     ])
         .then((data) => {
-            return connection.promise().query("INSERT INTO department (department_name) VALUES (?)", data.name)
-            // console.log("\nNew Department Created! See new Department below:");
-
-        }).then((results) => {
-            console.log("Add department result.", results)
-
-        }).then(() => promptUserMenu())
-
-        .catch((err) => {
-            console.error(err);
-            // process.exitCode = 1
-            // process.exit();
+            connection.query("INSERT INTO departments (department_name) VALUES (?)", data.name, (err, result) => {
+                console.log("\nNew Department Created! See new Department below:");
+                viewAllDepartments();
+                promptUserMenu()
+            })
         })
 };
-
-// const addDepartment = () => {
-//     inquirer.prompt([
-//         {
-//             type: "input",
-//             name: "newDepName",
-//             message: "What is the name of the new department? "
-//         }
-//     ])
-//     .then((data) => {
-//         connection.query("INSERT INTO department (name) VALUES (?)", data.name, (err, result) => {
-//             console.log("\nNew Department Created! See new Department below:");
-//             viewAllDepartments();
-//             promptUserMenu()
-//         })
-//     })
-// }; 
 
 //ADD ROLE
 const addRole = () => {
@@ -228,7 +228,7 @@ const addRole = () => {
     ])
         .then(data => {
             let params = [data.title, data.salary];
-            connection.query("SELECT * FROM department", (err, result) => {
+            connection.query("SELECT * FROM departments", (err, result) => {
                 if (err) {
                     throw err;
                 }
@@ -327,12 +327,12 @@ const updateEmployeeRole = () => {
     const roleArray = [];
     const employeeArray = [];
     // Populates role array with all roles
-    connection.query("SELECT * FROM role", function (err, results) {
+    connection.query("SELECT * FROM roles", function (err, results) {
         for (let i = 0; i < results.length; i++) {
             roleArray.push(results[i].title);
         }
         // Populates employee array with all employees
-        connection.query("SELECT * FROM employee", function (err, results) {
+        connection.query("SELECT * FROM employees", function (err, results) {
             for (let i = 0; i < results.length; i++) {
                 let employeeName = `${results[i].first_name} ${results[i].last_name}`
                 employee.push(employeeName);
@@ -352,10 +352,10 @@ const updateEmployeeRole = () => {
             ])
                 .then((data) => {
                     // Get role id
-                    connection.query("SELECT id FROM role WHERE role.title = ?;", data.role, (err, results) => {
+                    connection.query("SELECT id FROM roles WHERE roles.title = ?;", data.role, (err, results) => {
                         role_id = results[0].id;
-                        connection.query("SELECT id FROM employee WHERE employee.first_name = ? AND employee.last_name = ?;", data.employee.split(" "), (err, results) => {
-                            connection.query("UPDATE employee SET role_id = ? WHERE id = ?;", [role_id, results[0].id], (err, results) => {
+                        connection.query("SELECT id FROM employees WHERE employees.first_name = ? AND employee.last_name = ?;", data.employee.split(" "), (err, results) => {
+                            connection.query("UPDATE employees SET role_id = ? WHERE id = ?;", [role_id, results[0].id], (err, results) => {
                                 console.log("\nEmployee role updated. See results below: ");
                                 viewAllEmployees();
                                 promptUserMenu();
