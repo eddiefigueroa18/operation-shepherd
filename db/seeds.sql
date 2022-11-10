@@ -1,5 +1,4 @@
 -- This is the Data that is passed through to the differnet tables in the SCHEMA.sql file
-
 -- Add the department data --
 INSERT INTO departments(department_name)
 VALUES  ("Administration"),
@@ -7,8 +6,6 @@ VALUES  ("Administration"),
         ("Engineering"),
         ("Marketing"),
         ("Legal");
-
-
 
 -- Add the Roles data --
 INSERT INTO roles(title, salary, department_id)
@@ -23,8 +20,6 @@ VALUES  ("CEO", 777000.00, 1),
         ("Social Media Marketer", 100000.00, 4),
         ("Legal Team Lead", 400000.00, 5),
         ("Lawyer", 300000.00, 5);
-
-
 
 -- Add the Employees data --
 INSERT INTO employees(first_name, last_name, role_id, manager_id)

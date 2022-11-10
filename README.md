@@ -1,31 +1,59 @@
 # operation-shepherd
-An Employee Tracker
+
+## Description
+This Application allows a user to mange the employee structure of a business. You can view and add different departments, roles and employees. In addition a user can update en employees role in the business. 
+
+## Table of Contents
+* [Description](#description)
+* [Technologies](#technologies)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Preview](#preview)
+* [Contributors](#contributors)
+* [Contact](#contact)
+
+## Technologies 
+* JavaScript
+* HTML
+* Node
+* express.js
+* MySQl
+* Sequelize
+* Dotenv
+
+## Installation 
+1. Clone repository from github 
+2. Node.js must be installed
+3. Install Express.js using the integrated terminal 
+4. Install npm packages and other dependencies by inputting ` "npm i" `in the terminal
+5. The dependencies you will use for this application include but are not limited to: mysql2, inquirer, sequelize, dotenv & express.
+
+## Usage
+Navigate to db/connection.js file and input your own sql user and password. Run database, schema and seeds files by running the following commands in mysql shell. `"source db/schema.sql"` and then `"source db/seeds.sql"`. One that is done, exit out of the mysql shell. Then run `"node server.js"` into the terminal to be prompted with the applications questions.
+<br />
+<br />
 
 
-## Acceptance criteria 
-GIVEN a command-line application that accepts user input
+## Preview
+![](./assets/terminal-screenshot.png)
+<br />
+<br />
 
-WHEN I start the application
-THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+## Video 
+[Walk-through Video](https://drive.google.com/file/d/1ZT2sNoQgEnLEbwZrC8izjzeTOokW42MD/view)
 
-WHEN I choose to view all departments
-THEN I am presented with a formatted table showing department names and department ids
+## Contributors
+To contribute to operation-wordsmith, clone this repo locally and commit your code in a separate branch
 
-WHEN I choose to view all roles
-THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
+Contributors:
+<a href="https://github.com/eddiefigueroa18/operation-shepherd/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=eddiefigueroa18/operation-shepherd" />
+</a>
 
-WHEN I choose to view all employees
-THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
+Made with [contrib.rocks](https://contrib.rocks).
 
-WHEN I choose to add a department
-THEN I am prompted to enter the name of the department and that department is added to the database
-
-WHEN I choose to add a role
-THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-
-WHEN I choose to add an employee
-THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-
-WHEN I choose to update an employee role
-THEN I am prompted to select an employee to update and their new role and this information is updated in the database
+## Contact
+Eduardo Figueroa
+* Github: https://github.com/eddiefigueroa18
+* Email: eddiefigueroa18@gmail.com
 

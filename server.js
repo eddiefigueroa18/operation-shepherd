@@ -47,45 +47,44 @@ const promptUserMenu = () => {
             ]
         }
     ])
+    .then((data) => {
+        switch (data.menu) {
+            case "View all departments":
+                viewAllDepartments();
+                break;
 
-        .then((data) => {
-            switch (data.menu) {
-                case "View all departments":
-                    viewAllDepartments();
-                    break;
+            case "View all roles":
+                viewAllRoles();
+                break;
 
-                case "View all roles":
-                    viewAllRoles();
-                    break;
+            case "View all employees":
+                viewAllEmployees();
+                break;
 
-                case "View all employees":
-                    viewAllEmployees();
-                    break;
+            case "Add a Department":
+                addDepartment();
+                break;
 
-                case "Add a Department":
-                    addDepartment();
-                    break;
+            case "Add a role":
+                addRole();
+                break;
 
-                case "Add a role":
-                    addRole();
-                    break;
+            case "Add an employee":
+                addEmployee();
+                break;
 
-                case "Add an employee":
-                    addEmployee();
-                    break;
+            case "Update an employee role":
+                updateEmployeeRole();
+                break;
 
-                case "Update an employee role":
-                    updateEmployeeRole();
-                    break;
+            case "Exit":
+                process.exit();
+                break;
 
-                case "Exit":
-                    process.exit();
-                    break;
-
-                default:
-                    console.log("--------ending session--------")
-            }
-        })
+            default:
+                console.log("--------ending session--------")
+        }
+    })
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//

@@ -22,7 +22,6 @@ CREATE TABLE roles (
     department_id INT,
     PRIMARY KEY(id),
     FOREIGN KEY (department_id) REFERENCES departments(id)
-    -- (CONSTRAINT fk_department)? --
 );
 
 CREATE TABLE employees (
