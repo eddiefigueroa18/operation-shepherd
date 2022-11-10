@@ -26,7 +26,7 @@ const promptUserMenu = () => {
                 },
                 {
                     name: null,
-                    value: "Add a department"
+                    value: "Add a Department"
                 },
                 {
                     name: null,
@@ -40,6 +40,10 @@ const promptUserMenu = () => {
                     name: null,
                     value: "Update an employee role"
                 },
+                {
+                    name: null,
+                    value: "Exit"
+                }
             ]
         }
     ])
@@ -74,10 +78,12 @@ const promptUserMenu = () => {
                     updateEmployeeRole();
                     break;
 
+                case "Exit":
+                    process.exit();
+                    break;
+
                 default:
                     console.log("--------ending session--------")
-                // process.exitCode = 0
-                // process.exit();
             }
         })
 };
@@ -116,30 +122,6 @@ const viewAllEmployees = () => {
 
 // ADDING SECTION
 // Add a Department
-// const addDepartment = () => {
-//     inquirer.prompt([
-//         {
-//             type: "input",
-//             name: "newDepName",
-//             message: "What is the name of the new department? "
-//         }
-//     ])
-//         .then((data) => {
-//             return connection.promise().query("INSERT INTO departments (department_name) VALUES (?)", data.name)
-//             // console.log("\nNew Department Created! See new Department below:");
-
-//         }).then((results) => {
-//             console.log("Add department result.", results)
-
-//         }).then(() => promptUserMenu())
-
-//         .catch((err) => {
-//             console.error(err);
-//             // process.exitCode = 1
-//             // process.exit();
-//         })
-// };
-
 const addDepartment = () => {
     inquirer.prompt([
         {
@@ -148,17 +130,18 @@ const addDepartment = () => {
             message: "What is the name of the new department? "
         }
     ])
-    .then((data) => {
-        let newDept = [data.newDepName];
-        connection.query("INSERT INTO departments (department_name) VALUES (?)", newDept, (err) => {
-             if (err) {
-                throw err;
-            }
-            console.log("\nNew Department Created! See new Department below:");
-            viewAllDepartments();
+        .then((data) => {
+            let newDept = [data.newDepName];
+            connection.query("INSERT INTO departments (department_name) VALUES (?)", newDept, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("\nNew Department Created! See new Department below:");
+                viewAllDepartments();
+                promptUserMenu();
 
+            })
         })
-    })
 };
 
 //ADD ROLE
@@ -175,34 +158,34 @@ function addRole() {
             message: 'What is the salary for the new role?',
         }
     ])
-    .then(answer => {
-        let params = [answer.title, answer.salary];
-        connection.query('SELECT * FROM departments', (err, result) => {
-            if (err) {
-                console.log(err);
-            }
-            let depts = result.map(({ name, id }) => ({ name: name, value: id }));
-            inquirer.prompt([
-                {
-                    type: "list",
-                    name: "dept",
-                    message: "Choose which department the new role is a part of.",
-                    choices: depts
+        .then(answer => {
+            let params = [answer.title, answer.salary];
+            connection.query('SELECT * FROM departments', (err, result) => {
+                if (err) {
+                    console.log(err);
                 }
-            ])
-            .then(answer => {
-                let dept = answer.dept;
-                params.push(dept);
-                connection.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', params, (err) => {
-                    if (err) {
-                        console.log(err);
+                let depts = result.map(({ name, id }) => ({ name: name, value: id }));
+                inquirer.prompt([
+                    {
+                        type: "list",
+                        name: "dept",
+                        message: "Choose which department the new role is a part of.",
+                        choices: depts
                     }
-                    console.log("Role added");
-                    return promptUserMenu();
-                })
+                ])
+                    .then(answer => {
+                        let dept = answer.dept;
+                        params.push(dept);
+                        connection.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', params, (err) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                            console.log("Role added");
+                            return promptUserMenu();
+                        })
+                    })
             })
         })
-    })
 
 };
 
@@ -220,53 +203,53 @@ const addEmployee = () => {
             message: "Enter employee last name",
         }
     ])
-    .then(data => {
-        let params = [data.first_name, data.last_name];
-        connection.query("SELECT title, id FROM roles", (err, result) => {
-            if (err) {
-                throw err;
-            }
-            let roles = result.map(({ title, id }) => ({ name: title, value: id }));
-            inquirer.prompt([
-                {
-                    type: "list",
-                    name: "role",
-                    message: "Choose an employee role.",
-                    choices: roles
+        .then(data => {
+            let params = [data.first_name, data.last_name];
+            connection.query("SELECT title, id FROM roles", (err, result) => {
+                if (err) {
+                    throw err;
                 }
-            ])
-            .then(data => {
-                let role = data.role;
-                params.push(role)
-                connection.query("SELECT first_name, last_name, id FROM employees WHERE manager_id IS NULL", (err, result) => {
-                    if (err) {
-                        throw err;
+                let roles = result.map(({ title, id }) => ({ name: title, value: id }));
+                inquirer.prompt([
+                    {
+                        type: "list",
+                        name: "role",
+                        message: "Choose an employee role.",
+                        choices: roles
                     }
-                    let managers = result.map(({ first_name, last_name, id }) => ({ name: `${first_name} ${last_name}`, value: id }));
-                    managers.push({ name: "No Manager", value: null });
-                    inquirer.prompt([
-                        {
-                            type: "list",
-                            name: "manager",
-                            message: "Choose the employees manager.",
-                            choices: managers
-                        }
-                    ])
+                ])
                     .then(data => {
-                        let manager = data.manager;
-                        params.push(manager);
-                        connection.query("INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", params, (err) => {
+                        let role = data.role;
+                        params.push(role)
+                        connection.query("SELECT first_name, last_name, id FROM employees WHERE manager_id IS NULL", (err, result) => {
                             if (err) {
                                 throw err;
                             }
-                            console.log("New Employee Added! See Results below");
-                            promptUserMenu();
+                            let managers = result.map(({ first_name, last_name, id }) => ({ name: `${first_name} ${last_name}`, value: id }));
+                            managers.push({ name: "No Manager", value: null });
+                            inquirer.prompt([
+                                {
+                                    type: "list",
+                                    name: "manager",
+                                    message: "Choose the employees manager.",
+                                    choices: managers
+                                }
+                            ])
+                                .then(data => {
+                                    let manager = data.manager;
+                                    params.push(manager);
+                                    connection.query("INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", params, (err) => {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                        console.log("New Employee Added! See Results below");
+                                        promptUserMenu();
+                                    })
+                                })
                         })
                     })
-                })
             })
         })
-    })
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
@@ -287,57 +270,57 @@ const updateEmployeeRole = () => {
                 choices: employees
             }
         ])
-        .then(answer => {
-            let employeeChoice = answer.employeeUpdate;
-            let params = [employeeChoice];
-            connection.query("SELECT title, id FROM roles", (err, result) => {
-                if (err) {
-                    console.log(err);
-                }
-                let roles = result.map(({ title, id }) => ({ name: title, value: id }));
-                inquirer.prompt([
-                    {
-                        type: "list",
-                        name: "roleUpdate",
-                        message: "What is their new role?",
-                        choices: roles
+            .then(answer => {
+                let employeeChoice = answer.employeeUpdate;
+                let params = [employeeChoice];
+                connection.query("SELECT title, id FROM roles", (err, result) => {
+                    if (err) {
+                        console.log(err);
                     }
-                ])
-                .then(answer => {
-                    let roleChoice = (answer.roleUpdate);
-                    params.unshift(roleChoice);
-                    connection.query("SELECT first_name, last_name, id FROM employees WHERE manager_id IS NULL", (err, result) => {
-                        if (err) {
-                            console.log(err);
+                    let roles = result.map(({ title, id }) => ({ name: title, value: id }));
+                    inquirer.prompt([
+                        {
+                            type: "list",
+                            name: "roleUpdate",
+                            message: "What is their new role?",
+                            choices: roles
                         }
-                        let managers = result.map(({ first_name, last_name, id }) => ({ name: `${first_name} ${last_name}`, value: id }));
-                        managers.push({ name: "No manager", value: null });
-                        inquirer.prompt([
-                            {
-                                type: "list",
-                                name: "newManager",
-                                message: "Choose the employee's new manager, if any.",
-                                choices: managers
-                            }
-                        ])
+                    ])
                         .then(answer => {
-                            let newManager = (answer.newManager);
-                            params.unshift(newManager);
-                            connection.query("UPDATE employees SET manager_id = ?, role_id = ? WHERE id = ?", params, (err) => {
+                            let roleChoice = (answer.roleUpdate);
+                            params.unshift(roleChoice);
+                            connection.query("SELECT first_name, last_name, id FROM employees WHERE manager_id IS NULL", (err, result) => {
                                 if (err) {
                                     console.log(err);
                                 }
-                                console.log("Employee updated!");
-                                return promptUserMenu();
+                                let managers = result.map(({ first_name, last_name, id }) => ({ name: `${first_name} ${last_name}`, value: id }));
+                                managers.push({ name: "No manager", value: null });
+                                inquirer.prompt([
+                                    {
+                                        type: "list",
+                                        name: "newManager",
+                                        message: "Choose the employee's new manager, if any.",
+                                        choices: managers
+                                    }
+                                ])
+                                    .then(answer => {
+                                        let newManager = (answer.newManager);
+                                        params.unshift(newManager);
+                                        connection.query("UPDATE employees SET manager_id = ?, role_id = ? WHERE id = ?", params, (err) => {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                            console.log("Employee updated!");
+                                            return promptUserMenu();
+                                        })
+                                    })
                             })
                         })
-                    })
+
+
                 })
 
-
             })
-
-        })
 
     })
 };
